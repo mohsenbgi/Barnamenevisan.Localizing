@@ -5,12 +5,12 @@ namespace Barnamenevisan.Localizing.Services
 {
     public interface ILocalizingService
     {
-        Task FillModelToEditByAdminAsync<TLocalizedModel>(string entityName, object entityId, LocalizableViewModel<TLocalizedModel> model) where TLocalizedModel : LocalizedViewModel, new();
+        Task FillModelToEditByAdminAsync<TLocalizedModel>(string entityName, int entityId, LocalizableViewModel<TLocalizedModel> model) where TLocalizedModel : LocalizedViewModel, new();
         Task FillModelToEditByAdminAsync<TEntity, TLocalizedModel>(TEntity entity, LocalizableViewModel<TLocalizedModel> model)
             where TEntity : BaseEntity<int>
             where TLocalizedModel : LocalizedViewModel, new();
         Task SaveLocalizations<TEntity, TKey, TLocalizedModel>(TEntity entity, LocalizableViewModel<TLocalizedModel> model)
-            where TEntity : BaseEntity<TKey>
+            where TEntity : BaseEntity<int>
             where TKey : IEquatable<TKey>
             where TLocalizedModel : LocalizedViewModel, new();
         Task TranslateModelAsync<TLocalizedModel>(List<TLocalizedModel> models) where TLocalizedModel : class;

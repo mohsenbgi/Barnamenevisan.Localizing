@@ -173,7 +173,7 @@ namespace Barnamenevisan.Localizing.Services
             }
         }
 
-        public async Task FillModelToEditByAdminAsync<TLocalizedModel>(string entityName, object entityId, LocalizableViewModel<TLocalizedModel> model)
+        public async Task FillModelToEditByAdminAsync<TLocalizedModel>(string entityName, int entityId, LocalizableViewModel<TLocalizedModel> model)
             where TLocalizedModel : LocalizedViewModel, new()
         {
             model.LocalizedModels = new List<TLocalizedModel>();
@@ -215,7 +215,7 @@ namespace Barnamenevisan.Localizing.Services
         }
 
         public async Task SaveLocalizations<TEntity, TKey, TLocalizedModel>(TEntity entity, LocalizableViewModel<TLocalizedModel> model)
-            where TEntity : BaseEntity<TKey>
+            where TEntity : BaseEntity<int>
             where TLocalizedModel : LocalizedViewModel, new()
             where TKey : IEquatable<TKey>
         {
