@@ -1,6 +1,6 @@
 ﻿namespace Barnamenevisan.Localizing.ViewModels
 {
-    public class LocalizableViewModel<TModel> : BaseEntityViewModel<int>
+    public class LocalizableViewModel<TModel> : BaseEntityViewModel<ulong>
         where TModel : LocalizedViewModel, new()
     {
         public LocalizableViewModel()

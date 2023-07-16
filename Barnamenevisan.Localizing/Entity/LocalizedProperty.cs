@@ -2,9 +2,9 @@
 
 namespace Barnamenevisan.Localizing.Entity
 {
-    public class LocalizedProperty : BaseEntity<int>
+    public class LocalizedProperty : BaseEntity<ulong>
     {
-        public object EntityId { get; set; }
+        public ulong EntityId { get; set; }
 
         public string EntityName { get; set; }
 
