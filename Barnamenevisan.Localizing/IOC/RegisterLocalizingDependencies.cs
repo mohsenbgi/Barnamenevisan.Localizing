@@ -9,10 +9,8 @@ namespace Barnamenevisan.Localizing.IOC
     {
         public static void Register(IServiceCollection services, Type DbContextType)
         {
-            services.AddScoped<ILocalizedPropertyRepository, LocalizedPropertyRepository>(option =>
-            {
-                return new LocalizedPropertyRepository(option.GetRequiredService(DbContextType) as DbContext);
-            });
+            services.AddScoped(typeof(DbContext), DbContextType);
+            services.AddScoped<ILocalizedPropertyRepository, LocalizedPropertyRepository>();
             services.AddScoped<ILocalizingService, LocalizinService>();
         }
     }
