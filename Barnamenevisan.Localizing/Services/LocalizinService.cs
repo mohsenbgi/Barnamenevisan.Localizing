@@ -221,7 +221,7 @@ namespace Barnamenevisan.Localizing.Services
             if (entity is null) return;
 
             var savedLocalizedProperties = await _repository
-                .GetAllAsync(lp => Convert.ChangeType(lp.EntityId, typeof(int)).Equals(entity.Id) && lp.EntityName == entity.GetType().Name);
+                .GetAllAsync(lp => lp.EntityId == entity.Id && lp.EntityName == entity.GetType().Name);
 
             var propertiesOfLocalizedModelNeedToLocalize = typeof(TLocalizedModel)
                                             .GetProperties()
