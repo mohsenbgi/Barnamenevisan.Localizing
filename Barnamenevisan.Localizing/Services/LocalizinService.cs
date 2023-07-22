@@ -214,15 +214,14 @@ namespace Barnamenevisan.Localizing.Services
             return FillModelToEditByAdminAsync(entity.GetType().Name, entity.Id, model);
         }
 
-        public async Task SaveLocalizations<TEntity, TKey, TLocalizedModel>(TEntity entity, LocalizableViewModel<TLocalizedModel> model)
+        public async Task SaveLocalizations<TEntity, TLocalizedModel>(TEntity entity, LocalizableViewModel<TLocalizedModel> model)
             where TEntity : BaseEntity<int>
             where TLocalizedModel : LocalizedViewModel, new()
-            where TKey : IEquatable<TKey>
         {
             if (entity is null) return;
 
             var savedLocalizedProperties = await _repository
-                .GetAllAsync(lp => Convert.ChangeType(lp.EntityId, typeof(TKey)).Equals(entity.Id) && lp.EntityName == entity.GetType().Name);
+                .GetAllAsync(lp => Convert.ChangeType(lp.EntityId, typeof(int)).Equals(entity.Id) && lp.EntityName == entity.GetType().Name);
 
             var propertiesOfLocalizedModelNeedToLocalize = typeof(TLocalizedModel)
                                             .GetProperties()
