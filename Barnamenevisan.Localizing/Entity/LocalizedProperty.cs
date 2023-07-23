@@ -2,7 +2,7 @@
 
 namespace Barnamenevisan.Localizing.Entity
 {
-    public class LocalizedProperty : BaseEntity<ulong>
+    public class LocalizedProperty : BaseEntity<int>
     {
         public int EntityId { get; set; }
 

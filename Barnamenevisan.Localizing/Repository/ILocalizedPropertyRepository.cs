@@ -2,7 +2,7 @@
 
 namespace Barnamenevisan.Localizing.Repository
 {
-    public interface ILocalizedPropertyRepository : IRepository<LocalizedProperty, ulong>
+    public interface ILocalizedPropertyRepository : IRepository<LocalizedProperty, int>
     {
     }
 }

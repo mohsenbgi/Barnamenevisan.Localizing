@@ -161,7 +161,7 @@ namespace Barnamenevisan.Localizing.Services
                     var expectedLocalizedProperty = localizedProperties
                                                         .FirstOrDefault(lp =>
                                                                         lp.Key == attribute.Key &&
-                                                                        lp.EntityId.Equals(entityId) &&
+                                                                        lp.EntityId == entityId &&
                                                                         lp.CultureName == currentCultureName
                                                         );
 
