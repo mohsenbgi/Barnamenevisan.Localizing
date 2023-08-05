@@ -71,19 +71,28 @@ namespace Barnamenevisan.Localizing.Shared
         {
             TakeEntity = TakeEntity;
 
-            var allEntitiesCount = await queryable.CountAsync();
+            var allEntitiesCount = queryable.Count();
 
-            var pageCount = Convert.ToInt32(Math.Ceiling(allEntitiesCount / (double)TakeEntity));
+            var pageCount = 0;
+            try
+            {
+                pageCount = Convert.ToInt32(Math.Ceiling(allEntitiesCount / (double)TakeEntity));
+            }
+            catch (Exception)
+            {
+
+            }
 
             Page = Page > pageCount ? pageCount : Page;
             if (Page <= 0) Page = 1;
+
             AllEntitiesCount = allEntitiesCount;
             HowManyShowPageAfterAndBefore = HowManyShowPageAfterAndBefore;
             SkipEntity = (Page - 1) * TakeEntity;
             StartPage = Page - HowManyShowPageAfterAndBefore <= 0 ? 1 : Page - HowManyShowPageAfterAndBefore;
             EndPage = Page + HowManyShowPageAfterAndBefore > pageCount ? pageCount : Page + HowManyShowPageAfterAndBefore;
             PageCount = pageCount;
-            Entities = await queryable.Skip(SkipEntity).Take(TakeEntity).ToListAsync();
+            Entities = await Task.Run(() => queryable.Skip(SkipEntity).Take(TakeEntity).ToList());
             Counter = (Page - 1) * TakeEntity + 1;
             return this;
         }
