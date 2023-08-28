@@ -26,74 +26,10 @@ namespace Barnamenevisan.Localizing.Services
 
         #region Methods
 
-        public async Task TranslateModelAsync<TLocalizedModel>(TLocalizedModel model)
+        public Task TranslateModelAsync<TLocalizedModel>(TLocalizedModel model)
             where TLocalizedModel : class
         {
-            if (LocalizingTools.DefaultCultureName == Thread.CurrentThread.CurrentCulture.Name) return;
-
-            var propertiesOfModelToTranslate = typeof(TLocalizedModel)
-                .GetProperties()
-                .Where(property => property.CustomAttributes?.Any(attribute => attribute.AttributeType == typeof(TranslateAttribute)) ?? false)
-                .ToList();
-
-            if (!propertiesOfModelToTranslate.Any()) return;
-
-            var entityNames = propertiesOfModelToTranslate.Select(property =>
-                        property.CustomAttributes
-                        .First(attribute => attribute.AttributeType == typeof(TranslateAttribute))
-                        .NamedArguments
-                        .Where(argument => argument.MemberName == nameof(TranslateAttribute.EntityName))
-                        .Select(argument => argument.TypedValue.Value?.ToString())
-                        .FirstOrDefault() ?? typeof(TLocalizedModel).Name.Replace("ViewModel", "")
-                ).ToList().Distinct();
-
-            var currentCultureName = Thread.CurrentThread.CurrentCulture.Name;
-
-            var localizedProperties = await _repository
-                .GetAllAsync(lp => entityNames.Contains(lp.EntityName) && lp.CultureName == currentCultureName);
-
-            if (localizedProperties is null || !localizedProperties.Any())
-            {
-                return;
-            }
-
-            foreach (var propertyToTranslate in propertiesOfModelToTranslate)
-            {
-                var arguments = propertyToTranslate.CustomAttributes
-                            .First(attribute => attribute.AttributeType == typeof(TranslateAttribute))
-                            .NamedArguments;
-
-                var attribute = new TranslateAttribute();
-
-                foreach (var argument in arguments)
-                {
-                    attribute.GetType().GetProperty(argument.MemberName).SetValue(attribute, argument.TypedValue.Value?.ToString());
-                }
-
-                if (string.IsNullOrWhiteSpace(attribute.Key))
-                {
-                    attribute.Key = propertyToTranslate.Name;
-                }
-
-                if (string.IsNullOrWhiteSpace(attribute.EntityName))
-                {
-                    attribute.EntityName = typeof(TLocalizedModel).Name.Replace("ViewModel", "");
-                }
-
-                var entityId = (int?)model.GetType().GetProperty(attribute.PropertyNameOfEntityIdInThisClass)?.GetValue(model);
-
-                var expectedLocalizedProperty = localizedProperties
-                                                    .FirstOrDefault(lp =>
-                                                                    lp.Key == attribute.Key &&
-                                                                    lp.EntityId.Equals(entityId) &&
-                                                                    lp.CultureName == currentCultureName
-                                                    );
-
-                if (!string.IsNullOrWhiteSpace(expectedLocalizedProperty?.Value))
-                {
-                    propertyToTranslate.SetValue(model, expectedLocalizedProperty?.Value);
-                }
-            }
+            return TranslateModelAsync(new List<TLocalizedModel> { model });
         }
 
         public async Task TranslateModelAsync<TLocalizedModel>(List<TLocalizedModel> models)
