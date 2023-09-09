@@ -258,6 +258,32 @@ namespace Barnamenevisan.Localizing.Repository
             _dbSet.UpdateRange(entitiesToUpdatee);
         }
 
+        public virtual Task<bool> AnyAsync(Expression<Func<TEntity, bool>> filter)
+        {
+            return _dbSet.AnyAsync(filter);
+        }
+
+        public virtual async Task<bool> SoftDelete(TKey id)
+        {
+            var result = 0;
+
+            if (typeof(TEntity).IsAssignableTo(typeof(AuditBaseEntity<TKey>)))
+            {
+                result = await _dbSet
+                    .Where(e => e.Id.Equals(id))
+                    .ExecuteUpdateAsync(s => s.SetProperty(e => e.IsDeleted, true)
+                                              .SetProperty(e => (e as AuditBaseEntity<TKey>).UpdatedDateOnUtc, DateTime.UtcNow));
+            }
+            else
+            {
+                result = await _dbSet
+                    .Where(e => e.Id.Equals(id))
+                    .ExecuteUpdateAsync(s => s.SetProperty(e => e.IsDeleted, true));
+            }
+
+            return result > 0;
+        }
+
         public virtual async Task SaveAsync() => await _context.SaveChangesAsync();
 
         #endregion

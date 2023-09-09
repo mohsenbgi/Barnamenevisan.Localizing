@@ -58,5 +58,7 @@ namespace Barnamenevisan.Localizing.Repository
             Expression<Func<TEntity, object>>? orderBy = null,
             Expression<Func<TEntity, object>>? orderByDesc = null,
             params string[] includeProperties);
+        Task<bool> AnyAsync(Expression<Func<TEntity, bool>> filter);
+        Task<bool> SoftDelete(TKey id);
     }
 }
