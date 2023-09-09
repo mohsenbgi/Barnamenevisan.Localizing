@@ -6,5 +6,7 @@ namespace Barnamenevisan.Localizing.Shared
     {
         [Key]
         public T Id { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }
