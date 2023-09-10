@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Barnamenevisan.Localizing.Shared
 {
@@ -8,5 +9,12 @@ namespace Barnamenevisan.Localizing.Shared
         public T Id { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public TEntity DeepCopy<TEntity>() where TEntity : class
+        {
+            return JsonConvert.DeserializeObject<TEntity>(
+                JsonConvert.SerializeObject(this, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore })
+            );
+        }
     }
 }
